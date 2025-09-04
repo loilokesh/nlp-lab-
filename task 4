@@ -1,0 +1,33 @@
+
+import nltk
+from nltk.tokenize import word_tokenize
+from nltk.corpus import stopwords
+from nltk.probability import FreqDist
+
+nltk.download('punkt')
+nltk.download('stopwords')
+
+sample_text = """
+The quick brown fox jumps over the lazy dog. This sentence contains every letter of the alphabet.
+It is often used to test typing skills and fonts fox.
+"""
+
+def tokenize_document(document):
+    tokens = word_tokenize(document)
+    return [word.lower() for word in tokens if word.isalpha()]
+
+def remove_stopwords(tokens):
+    stop_words = set(stopwords.words('english'))
+    return [word for word in tokens if word not in stop_words]
+
+def find_morphology(tokens):
+    fdist = FreqDist(tokens)
+    return fdist.most_common()
+
+tokens = tokenize_document(sample_text)
+tokens_without_stopwords = remove_stopwords(tokens)
+morphology = find_morphology(tokens_without_stopwords)
+
+print("Word frequencies (excluding stopwords):")
+for word, freq in morphology:
+    print(f"{word}: {freq}")
